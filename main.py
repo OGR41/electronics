@@ -7,8 +7,8 @@ class Products:
 
     def __init__(self, title: str, price, quantity):
         self.__title = title
-        self.price = int(price)
-        self.quantity = int(quantity)
+        self.price = price
+        self.quantity = quantity
         self.all.append(self)
 
     @property
