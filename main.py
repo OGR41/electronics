@@ -51,6 +51,7 @@ class Products:
     def __str__(self):
         return f'{self.title}'
 
+
 # def main():
 #     product1 = Products('Смартфон', 10000, 20)
 #     product1
