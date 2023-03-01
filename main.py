@@ -4,12 +4,12 @@ import csv
 class Products:
     pay_rate = 1
     all = []
+    file_name = 'items.csv'
 
     def __init__(self, title: str, price, quantity):
         self.__title = title
         self.price = price
         self.quantity = quantity
-        self.all.append(self)
 
     @property
     def title(self):
@@ -23,7 +23,7 @@ class Products:
             self.__title = value
 
     def total_price(self):
-        return self.price * self.quantity * self.pay_rate
+        return self.price * self.quantity
 
     def discount(self):
         self.price = self.price * self.pay_rate
@@ -31,48 +31,31 @@ class Products:
 
     @classmethod
     def instantiate_from_csv(cls):
-        with open('items.csv', 'r', encoding='windows-1251') as file:
+        with open(Products.file_name, 'r', encoding='windows-1251') as file:
             reader = csv.reader(file, delimiter=',')
             count = 0
             for i in reader:
                 if count == 0:
                     count += 1
                 else:
-                    Products(i[0], int(i[1]), int(i[2]))
+                    Products.all.append(Products(i[0], int(i[1]), int(i[2])))
                     count += 1
 
     @staticmethod
     def is_integer(n):
         return int(n) == float(n)
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}("{self.title}", {self.price}, {self.quantity})'
+
+    def __str__(self):
+        return f'{self.title}'
+
 
 # def main():
-#     # product1 = Products("Смартфон", 10000, 20)
-#     # product2 = Products("Ноутбук", 20000, 5)
-#     #
-#     # print(product1.total_price())
-#     # print(product2.total_price())
-#     #
-#     # Products.pay_rate = 0.8
-#     # product1.discount()
-#     # print(product1.price)
-#     # print(product2.price)
-#     #
-#     # print(Products.all)
-#
-    # product = Products('Телефон', 10000, 5)
-    # product.title = 'Смартфон'
-    # print(product.title)
-    # product.title = 'СуперСмартфон'
-#
-    # Products.instantiate_from_csv()
-    # print(len(Products.all))
-    # product1 = Products.all[0]
-    # print(product1.title)
-#
-#     print(Products.is_integer(5))
-#     print(Products.is_integer(5.0))
-#     print(Products.is_integer(5.5))
+#     product1 = Products('Смартфон', 10000, 20)
+#     product1
+#     print(product1)
 #
 #
 # if __name__ == '__main__':
