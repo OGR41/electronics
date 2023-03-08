@@ -79,17 +79,35 @@ class Phone(Item):
         return f'{self.__class__.__name__}("{self.len_title}", {self.price}, {self.quantity}, {self.sim_quantity})'
 
 
-# item1 = Item('Суперсмартфон', 2000, 20)
-# item = Item('Чехол', 2000, 20)
-# print(str(item))
-# phone = Phone("iPhone 14", 120_000, 5, 2)
-# print(phone.__repr__())
-# def main():
-#     phone = Phone("iPhone 14", 120_000, 5, 2)
-#     print(phone)
-#     print(repr(phone))
-#     phone.number_of_sim = 0
-#
-#
-# if __name__ == '__main__':
-#     main()
+class MixinLog:
+    @property
+    def language(self):
+        return str(self.__lang)
+
+    @language.setter
+    def language(self, value):
+        if 'RU' != value != 'EN':
+            raise AttributeError("property 'language' of 'KeyBoard' object has no setter")
+        else:
+            self.__lang = value
+
+    def change_lang(self):
+        if self.__lang == "EN":
+            self.__lang = 'RU'
+        elif self.__lang == "RU":
+            self.__lang = 'EN'
+
+
+class Keyboard(Item, MixinLog):
+    def __init__(self, *args, lang='EN'):
+        super().__init__(*args)
+        self.__lang = lang
+        self.language = lang
+
+
+# kb = Keyboard('D_P_KD87A', 9600, 5)
+# print(kb)
+# print(kb.language)
+# kb.change_lang()
+# print(kb.language)
+# kb.language = 'CH'
