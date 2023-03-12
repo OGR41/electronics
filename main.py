@@ -80,32 +80,28 @@ class Phone(Item):
 
 
 class MixinLog:
+
     @property
     def language(self):
-        return str(self.__lang)
-
-    @language.setter
-    def language(self, value):
-        if 'RU' != value != 'EN':
-            raise AttributeError("property 'language' of 'KeyBoard' object has no setter")
-        else:
-            self.__lang = value
+        return str(kb.__repr__())
 
     def change_lang(self):
-        if self.__lang == "EN":
-            self.__lang = 'RU'
-        elif self.__lang == "RU":
-            self.__lang = 'EN'
+        if kb._Keyboard__lang == "EN":
+            kb._Keyboard__lang = 'RU'
+        elif kb._Keyboard__lang == "RU":
+            kb._Keyboard__lang = 'EN'
 
 
 class Keyboard(Item, MixinLog):
     def __init__(self, *args, lang='EN'):
         super().__init__(*args)
         self.__lang = lang
-        self.language = lang
+
+    def __repr__(self):
+        return self.__lang
 
 
-# kb = Keyboard('D_P_KD87A', 9600, 5)
+kb = Keyboard('D_P_KD87A', 9600, 5)
 # print(kb)
 # print(kb.language)
 # kb.change_lang()
