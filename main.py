@@ -1,4 +1,5 @@
 import csv
+import os.path
 
 
 class Item:
@@ -32,15 +33,27 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls):
-        with open(Item.file_name, 'r', encoding='windows-1251') as file:
-            reader = csv.reader(file, delimiter=',')
-            count = 0
-            for i in reader:
-                if count == 0:
-                    count += 1
-                else:
-                    Item.all.append(Item(i[0], int(i[1]), int(i[2])))
-                    count += 1
+        try:
+            with open(Item.file_name, 'r', encoding='windows-1251') as file:
+                reader = csv.DictReader(file, delimiter=',')
+                for row in reader:
+                    if list(row.keys()) == ['name', 'price', 'quantity']:
+                        cls(title=row['name'], price=row['price'], quantity=row['quantity'])
+                    else:
+                        raise InstantiateCSVError
+                count = 0
+                for i in reader:
+                    if count == 0:
+                        count += 1
+                    else:
+                        Item.all.append(Item(i[0], int(i[1]), int(i[2])))
+                        count += 1
+        except FileNotFoundError:
+            error_info = 'FileNotFoundError: Отсутствует файл item.csv'
+            print(error_info)
+        except InstantiateCSVError:
+            error_info = 'InstantiateCSVError: Файл item.csv поврежден'
+            print(error_info)
 
     @staticmethod
     def is_integer(n):
@@ -51,6 +64,11 @@ class Item:
 
     def __str__(self):
         return f'{self.__title}'
+
+
+class InstantiateCSVError(Exception):
+    def __init__(self):
+        super().__init__()
 
 
 class Phone(Item):
@@ -84,6 +102,12 @@ class MixinLog:
     @property
     def language(self):
         return str(kb.__repr__())
+        # f:
+        #     return str(kb.__repr__())
+        # elif kb._Keyboard__lang == 'RU':
+        #     return str(kb.__repr__())
+        # else:
+        #     return "AttributeError: property 'language' of 'KeyBoard' object has no setter"
 
     def change_lang(self):
         if kb._Keyboard__lang == "EN":
@@ -101,6 +125,7 @@ class Keyboard(Item, MixinLog):
         return self.__lang
 
 
+# Item.instantiate_from_csv()
 kb = Keyboard('D_P_KD87A', 9600, 5)
 # print(kb)
 # print(kb.language)
