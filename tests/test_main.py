@@ -37,7 +37,7 @@ class TestItem:
 
     def test_instantiate_from_csv(self, item1):
         item1.instantiate_from_csv()
-        with open(Item.file_name, 'r', encoding='windows-1251') as file:
+        with open(item1.file_name, 'r', encoding='windows-1251') as file:
             reader = csv.reader(file, delimiter=',')
             count = 0
             for i in reader:
@@ -47,6 +47,11 @@ class TestItem:
                     Item.all.append(Item(i[0], int(i[1]), int(i[2])))
                     count += 1
         assert len(Item.all) > 0
+
+    def test_file_not_found_error(self, item1):
+        """Ожидается обработка исключения FileNotFoundError в связи с отсутствием файла"""
+        item1.file_name = 'test.csv'
+        assert item1.instantiate_from_csv() == print("FileNotFoundError: Отсутствует файл item.csv")
 
 
 @pytest.mark.parametrize('phone1 ', [Phone("iPhone 14", 120000, 5, 2)])
@@ -82,3 +87,4 @@ class TestKeyboard:
         assert kb.language == 'EN'
         with pytest.raises(AttributeError):
             kb.language = 'CH'
+
