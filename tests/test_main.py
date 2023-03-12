@@ -76,7 +76,6 @@ class TestKeyboard:
         assert kb.language == 'EN'
 
     def test_change_lang(self, kb):
-        kb.language = 'EN'
         kb.change_lang()
         assert kb.language == 'RU'
         kb.change_lang()
